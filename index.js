@@ -9,6 +9,23 @@ app.use(express.json())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+/**
+ * @openapi
+ * /test:
+ *   get:
+ *     summary: Проверка работоспособности сервера
+ *     responses:
+ *       200:
+ *         description: Сервер успешно запущен
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Habit Tracker API is running
+ */
 app.get("/test", (req, res) => {
     res.json({
         message: "Habit Tracker API is running"

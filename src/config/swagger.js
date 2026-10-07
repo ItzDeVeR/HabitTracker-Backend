@@ -25,7 +25,7 @@ const options = {
         },
     },
     // Пути к файлам, где Swagger будет искать JSDoc-комментарии:
-    apis: ['./server.js', './src/routes/*.js'],
+    apis: ['./index.js', './src/routes/*.js'],
 };
 
 module.exports = swaggerJsdoc(options);
