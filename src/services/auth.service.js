@@ -18,6 +18,8 @@ function createUser(email, password) {
 function loginUser(email, password) {
     const candidateUser = db.prepare("select id, password_hash from users where email = ?").get(email);
 
+    if (!candidateUser) return false;
+
     if (!bcrypt.checkPassword(password, candidateUser.password_hash)) return false;
 
     return candidateUser.id;

@@ -31,6 +31,8 @@ exports.loginUser = (req, res) => {
 
         const userId = authService.loginUser(email, password);
 
+        if (!userId) return res.status(401).json("Неверная почта или пароль");
+
         const result = jwt.createToken({id: userId, email});
 
         return res.json(result);
