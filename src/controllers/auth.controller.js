@@ -1,31 +1,20 @@
 const authService = require("../services/auth.service")
 const jwt = require("../config/jwt");
 
-exports.getUsers = (req, res) => {
-    try {
-        const result = authService.getAllUsers();
-
-        return res.json(result);
-    }
-    catch (err) {
-        console.log("err");
-    }
-}
-
-exports.registerUser = (req, res) => {
+exports.registerUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const candidateId = authService.createUser(email, password);
+        const candidateId = await authService.createUser(email, password);
 
         const result = jwt.createToken({ id: candidateId, email })
 
         return res.json(result);
     } catch (err) {
-        console.log(err)
+        next(err)
     }
 }
 
-exports.loginUser = (req, res) => {
+exports.loginUser = (req, res, next) => {
     try {
         const { email, password} = req.body;
 
@@ -37,6 +26,6 @@ exports.loginUser = (req, res) => {
 
         return res.json(result);
     } catch (err) {
-        console.log(err)
+        next(err);
     }
 }

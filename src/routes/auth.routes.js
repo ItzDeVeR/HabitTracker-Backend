@@ -20,7 +20,6 @@ const authController = require("../controllers/auth.controller");
  *                   type: string
  *                   example: Json example
  */
-router.get("/users", authController.getUsers);
 router.post("/register", authController.registerUser);
 router.post("/login", authController.loginUser);
 

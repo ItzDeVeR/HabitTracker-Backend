@@ -5,11 +5,14 @@ const port = process.env.PORT || 3000;
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./src/config/swagger');
 const routes = require("./src/routes/index")
+const errorHandler = require("./src/middlewares/error.middleware");
 
 app.use(express.json())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api", routes);
+
+app.use(errorHandler);
 
 /**
  * @openapi

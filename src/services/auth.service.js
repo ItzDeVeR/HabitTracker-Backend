@@ -1,18 +1,23 @@
 const db = require("../config/db.js");
 const bcrypt = require("../config/bcrypt.js");
 
-async function getAllUsers() {
-    const users = db.prepare("select * from users").all();
+function isExistEmail(email) {
+    const candidateEmail = db.prepare("select count(email) from users where email = ?").pluck().get(email);
 
-    return users;
+    return candidateEmail ? true : false;
 }
 
-function createUser(email, password) {
-    const hashedPassword = bcrypt.createHash(password);
+async function createUser(email, password) {
+    if (isExistEmail(email)) {
+        const error = new Error("Данный email уже занят.");
+        error.statusCode = 409;
+        throw error;
+    }
+    const hashedPassword = await bcrypt.createHash(password);
 
-    const lastId = db.prepare("insert into users (email, password_hash) values (?, ?)").run(email, hashedPassword);
+    const {lastInsertRowid} = db.prepare("insert into users (email, password_hash) values (?, ?)").run(email, hashedPassword);
 
-    return lastId.lastInsertRowid;
+    return Number(lastInsertRowid);
 }
 
 function loginUser(email, password) {
@@ -26,7 +31,6 @@ function loginUser(email, password) {
 }
 
 module.exports = {
-    getAllUsers,
     createUser,
     loginUser
 }
